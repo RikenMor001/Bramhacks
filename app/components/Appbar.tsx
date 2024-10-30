@@ -1,9 +1,12 @@
-
+'use client'
 
 export default function Appbar(){
+
     return <div className="flex justify-between p-3 bg-slate-100">
-        <div className="flex justify-center  text-2xl font-bold">
-            Arrow
+        <div className="flex justify-center flex-col text-2xl font-bold mb-5">
+            <button>
+                Arrow
+            </button>
         </div>
         <div className="flex justify-between">
             <div className="flex mt-1 text-slate-500 font-semibold">
@@ -36,3 +39,5 @@ export default function Appbar(){
         </div>
     </div>
 }
+
+
