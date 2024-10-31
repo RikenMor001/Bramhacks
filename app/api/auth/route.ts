@@ -1,4 +1,5 @@
 
+
 // Take the req.body inputs and check if the user already exists or not 
 // Than get the headers and check the headers are authorized are not 
 // Than split the token from the header after requesting it back
@@ -7,18 +8,23 @@
 // Do the password validation in sing in and not sign up 
 // Compare the password (Use bcrypt for that) 
 // Than create the user in prims.user.create({data: {email: body.email, password: body.password}})
-
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import axios from 'axios';
 
 const prisma = new PrismaClient();
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
     const { email, password } = await req.json();
-
+    const response = await axios.post("http://localhost:3000");
+    if (response){
+        return NextResponse.json({
+            message: "credentials sent to the frontend"
+        }, {status: 200})
+    }
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: { email },
@@ -79,4 +85,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
       { status: 500 }
     );
   }
+}
+
+export default function GET(req: NextRequest, res: NextResponse){
+  return NextResponse.json({
+    message: "Welcome to localhost:3000"
+  })
 }
