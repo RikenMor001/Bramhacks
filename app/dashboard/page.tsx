@@ -3,7 +3,7 @@ import Appbar from "../components/Appbar";
 
 export default function Dashboard() {
   return (
-    <div className="bg-slate-100 min-h-screen flex flex-col">
+    <div className="bg-zinc-300	 min-h-screen flex flex-col">
       <Appbar />
       <div className="flex flex-col items-center text-center mt-16 p-4">
         <h1 className="text-6xl font-bold mb-6">Driving Towards A Sustainable Future</h1>
@@ -42,3 +42,4 @@ export default function Dashboard() {
     </div>
   );
 }
+
