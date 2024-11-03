@@ -4,14 +4,14 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 
 export default function Signup() {
-    const [username, setUsername] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
+    const [ username, setUsername ] = useState<string>('');
+    const [ password, setPassword ] = useState<string>('');
     const [ email, setEmail ] = useState<string>('');
     const router = useRouter();
 
     const handleClick = async () => {
         try {
-            const response = await axios.post("http://localhost:3000/api", {username, password, email});
+            const response = await axios.post("http://localhost:3000/api/auth/signup", {username, password, email});
             if (response.status === 200) {
                 router.push("/signin");
             }
