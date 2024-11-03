@@ -1,50 +1,50 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
-export async function POST(req: NextRequest, res: NextResponse){
+export async function POST(req: NextRequest) {
     try {
-        const { username, password }  = await req.json();
+        const { username, password } = await req.json();
+
         const user = await prisma.user.findUnique({
-            where:{
-                username,
-                password
-            }
-        })
+            where: { username },
+        });
 
-        if (!user){
+        if (!user) {
             return NextResponse.json({
-                error: "There does not exist any user"
-            }, {status: 400})
+                error: "User does not exist",
+            }, { status: 400 });
         }
-    
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return NextResponse.json({
+                error: "Invalid password",
+            }, { status: 400 });
+        }
+
         const JWT_SECRET = process.env.JWT_SECRET as string;
-        if (JWT_SECRET){
+
+        if (!JWT_SECRET) {
             return NextResponse.json({
-                error: "Token sent was invalid/unauthorised"
-            })
+                error: "Token secret is not defined",
+            }, { status: 500 });
         }
 
-        const userToken = jwt.sign({id: user.id}, JWT_SECRET, {
-            expiresIn: "1h"
-        })
-    
+        const userToken = jwt.sign({ id: user.id }, JWT_SECRET, {
+            expiresIn: "1h",
+        });
+
         return NextResponse.json({
-            message: "Sign-in successful!!",
-            token: userToken
-        }, {status: 200})
-    }catch(error){
+            message: "Sign-in successful!",
+            token: userToken,
+        }, { status: 200 });
+    } catch (error) {
         return NextResponse.json({
-            error: "There was an error while doing the signing process" + error
-        })
+            error: "An error occurred during the signing process: " + error,
+        }, { status: 500 });
     }
 }
-
-export function GET() {
-    return NextResponse.json({
-      message: "Welcome to localhost:3000/signin"
-    });
-  }
-  
