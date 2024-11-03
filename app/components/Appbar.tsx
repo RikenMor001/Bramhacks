@@ -1,4 +1,4 @@
-\
+
 export default function Appbar(){
 
     return <div className="flex justify-between p-3 bg-zinc-300	">
