@@ -15,14 +15,15 @@ import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-
 export async function POST(req: NextRequest) {
   try {
     const { username, email, password } = await req.json();
 
-    // Check if user already exists
     const existingUser = await prisma.user.findUnique({
-      where: { email, username },
+      where: { 
+        email: email,
+        username: username 
+      },
     });
 
     if (existingUser) {
@@ -32,10 +33,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Hash the password
     const passwordHash = await bcrypt.hash(password, 10);
 
-    // Create the new user
     const newUser = await prisma.user.create({
       data: {
         username,
@@ -44,7 +43,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Generate JWT token upon successful signup
+    // Generate JWT token upon  signup
     const JWT_SECRET = process.env.JWT_SECRET as string;
     const userToken = jwt.sign({ id: newUser.id }, JWT_SECRET, {
       expiresIn: "1h",
