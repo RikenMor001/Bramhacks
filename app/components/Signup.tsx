@@ -1,6 +1,7 @@
 "use client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { NextResponse } from "next/server";
 import { ChangeEvent, useState } from "react";
 
 export default function Signup() {
@@ -16,7 +17,9 @@ export default function Signup() {
                 router.push("/signin");
             }
         } catch (error) {
-            console.error("Signup failed:", error);
+            return NextResponse.json({
+                message:"There was an error" + error
+            })
         }
     };
 
