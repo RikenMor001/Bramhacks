@@ -8,18 +8,23 @@ export default function Signup() {
     const [ username, setUsername ] = useState<string>('');
     const [ password, setPassword ] = useState<string>('');
     const [ email, setEmail ] = useState<string>('');
+    const [error, setError] = useState<string | any>(null);
     const router = useRouter();
 
     const handleClick = async () => {
         try {
-            const response = await axios.post("http://localhost:3000/api/auth/signup", {username, password, email});
+            const response = await axios.post("http://localhost:3000/api/auth/signup", { username,email, password });
             if (response.status === 200) {
-                router.push("/signin");
+                router.push("/signin"); 
+            } else {
+                setError("Invalid credentials. Please try again."); 
             }
-        } catch (error) {
-            return NextResponse.json({
-                message:"There was an error" + error
-            })
+        } catch (error: any) {
+            if (error.response?.status === 404) {
+                setError("User does not exist. Please sign up."); 
+            } else {
+                setError(error.response?.data?.message || "Sign-in failed. Please try again."); 
+            }
         }
     };
 
@@ -62,7 +67,9 @@ export default function Signup() {
 
             <div className="mt-4 flex items-center text-gray-600">
                 <p className="mr-2">Already have an account?</p>
-                    <button onClick={handleClick} className="text-slate-600 hover:underline">Sign In</button>
+                    <button onClick={() => {
+                        router.push("/signin")
+                    }} className="text-slate-600 hover:underline">Sign In</button>
             </div>
         </div>
     );
