@@ -4,27 +4,38 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 
 export default function SignInCardPage() {
-    const [username, setUsername] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
+    const [username, setUsername] = useState<string | any>(null);
+    const [password, setPassword] = useState<string | any>(null);
+    const [error, setError] = useState<string | any>(null); // State for error message
     const router = useRouter();
 
     const handleClick = async () => {
         try {
-            const response = await axios.post("http://localhost:3000/api", {username, password});
+            const response = await axios.post("http://localhost:3000/api/auth/signin", { username, password });
             if (response.status === 200) {
-                router.push("/dashboard");
+
+                localStorage.setItem('token', response.data.token);
+                router.push("/dashboard"); 
+            } else {
+                setError("Invalid credentials. Please try again."); 
             }
-        } catch (error) {
-            console.error("SignIn failed:", error);
+        } catch (error: any) {
+            if (error.response?.status === 404) {
+                setError("User does not exist. Please sign up."); 
+            } else {
+                setError(error.response?.data?.message || "Sign-in failed. Please try again."); 
+            }
         }
     };
 
     return (
-        <div className="flex justify-center bg-zinc-300	items-center h-screen flex-col">
+        <div className="flex justify-center bg-zinc-300 items-center h-screen flex-col">
             <div className="text-center mb-8">
                 <h1 className="font-bold text-4xl text-gray-800 mb-2">Log into your account</h1>
                 <p className="text-gray-600">Join us and drive towards a sustainable future.</p>
             </div>
+
+            {error && <div className="text-slate-700 mb-4">{error}</div>} 
 
             <Input
                 label="Username"
@@ -40,7 +51,6 @@ export default function SignInCardPage() {
                 onChange={(e) => setPassword(e.target.value)}
             />
 
-
             <div className="mt-6">
                 <button
                     onClick={handleClick}
@@ -51,29 +61,30 @@ export default function SignInCardPage() {
 
             <div className="mt-4 flex items-center text-gray-600">
                 <p className="mr-2">Don't have an account?</p>
-                    <button onClick={handleClick} className="text-slate-600 hover:underline">Sign Up</button>
+                <button onClick={() => router.push('/signup')} className="text-slate-600 hover:underline">Sign Up</button>
             </div>
         </div>
     );
 }
 
-interface inputTypes {
+interface InputProps {
     label: string;
     placeholder: string;
     type?: string;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-function Input({ label, placeholder, type, onChange }: inputTypes) {
+function Input({ label, placeholder, type, onChange }: InputProps) {
     return (
         <div className="flex flex-col items-center w-full mb-5">
-            <label className="font-semibold text-lg text-gray-800 mb-2">{ label }</label>
+            <label className="font-semibold text-lg text-gray-800 mb-2">{label}</label>
             <input
-                placeholder={ placeholder }
-                type={ type }
-                onChange={ onChange }
+                placeholder={placeholder}
+                type={type}
+                onChange={onChange}
                 className="w-1/5 bg-gray-200 text-gray-900 text-sm rounded-lg shadow-md p-4 border border-gray-400"
             />
         </div>
     );
 }
+
