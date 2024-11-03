@@ -1,15 +1,14 @@
-'use client'
-
+\
 export default function Appbar(){
 
-    return <div className="flex justify-between p-3 bg-slate-100">
-        <div className="flex justify-center flex-col text-2xl font-bold mb-5">
+    return <div className="flex justify-between p-3 bg-zinc-300	">
+        <div className="flex justify-center text-2xl font-bold mb-10">
             <button>
                 Arrow
             </button>
         </div>
         <div className="flex justify-between">
-            <div className="flex mt-1 text-slate-500 font-semibold">
+            <div className="flex mt-1 text-slate-700 font-semibold">
                 <div className="hover:text-slate-800 mr-8">
                     <button>
                         Home
@@ -22,7 +21,7 @@ export default function Appbar(){
                 </div>
                 <div className="mr-8 hover:text-slate-800">
                     <button>
-                        Company
+                        Maps
                     </button>
                 </div>
                 <div className="mr-8 hover:text-slate-800">
@@ -32,7 +31,7 @@ export default function Appbar(){
                 </div>
             </div>
             <div className="mr-2">
-                <button className="text-black bg-slate-300 hover:bg-slate-400 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
+                <button className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-10">
                     Contact Us
                 </button>
             </div>
