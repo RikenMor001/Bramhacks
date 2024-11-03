@@ -1,10 +1,9 @@
 'use client'
 import React from 'react'
-import Signup from './components/Signup'
+import SignUpProcess from './signup/page'
 
 export default function Home(){
   return <div>
-    <Signup />
+    <SignUpProcess/>    
   </div>
 }
-
