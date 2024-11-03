@@ -6,7 +6,7 @@ import { ChangeEvent, useState } from "react";
 export default function SignInCardPage() {
     const [username, setUsername] = useState<string | any>(null);
     const [password, setPassword] = useState<string | any>(null);
-    const [error, setError] = useState<string | any>(null); // State for error message
+    const [error, setError] = useState<string | any>(null);
     const router = useRouter();
 
     const handleClick = async () => {
@@ -87,4 +87,3 @@ function Input({ label, placeholder, type, onChange }: InputProps) {
         </div>
     );
 }
-
